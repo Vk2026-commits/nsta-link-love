@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import safetyGuide from "@/assets/safety-guide.pdf.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
