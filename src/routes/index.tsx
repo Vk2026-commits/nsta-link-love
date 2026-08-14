@@ -60,6 +60,12 @@ const LINKS: LinkItem[] = [
     icon: "download",
   },
   {
+    label: "Book a Consultation",
+    sub: "30-min call · via Calendly",
+    href: "https://calendly.com/staylor-kairossecurity/30min",
+    icon: "calendar",
+  },
+  {
     label: "Get Information / Contact",
     sub: "hello@kairossecurity.com",
     href: "mailto:hello@kairossecurity.com",
