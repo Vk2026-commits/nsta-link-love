@@ -47,9 +47,9 @@ const ICONS = {
 
 const LINKS: LinkItem[] = [
   {
-    label: "View Products",
-    sub: "Browse our security solutions",
-    href: "https://www.kairossecurity.com/products",
+    label: "Kairos Security Academy",
+    sub: "Courses & training",
+    href: "https://www.kairossecurityacademy.com",
     icon: "cart",
     primary: true,
   },
