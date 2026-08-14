@@ -57,9 +57,9 @@ const LINKS: LinkItem[] = [
     primary: true,
   },
   {
-    label: "Download Free Security Guide",
+    label: "The Smart Woman's Personal Safety Guide",
     sub: "PDF · Free download",
-    href: "https://www.kairossecurity.com/guide.pdf",
+    href: safetyGuide.url,
     icon: "download",
   },
   {
