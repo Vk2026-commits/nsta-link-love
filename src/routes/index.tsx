@@ -71,21 +71,9 @@ const LINKS: LinkItem[] = [
   },
   {
     label: "Get Information / Contact",
-    sub: "hello@kairossecurity.com",
-    href: "mailto:hello@kairossecurity.com",
+    sub: "www.kairossecurity.com",
+    href: "https://www.kairossecurity.com",
     icon: "mail",
-  },
-  {
-    label: "Instagram",
-    sub: "@kairossecurity",
-    href: "https://instagram.com/kairossecurity",
-    icon: "instagram",
-  },
-  {
-    label: "LinkedIn",
-    sub: "Kairos Security",
-    href: "https://linkedin.com/company/kairossecurity",
-    icon: "linkedin",
   },
 ];
 
