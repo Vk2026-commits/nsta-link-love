@@ -60,7 +60,7 @@ const LINKS: LinkItem[] = [
   {
     label: "The Smart Woman's Personal Safety Guide",
     sub: "PDF · Free download",
-    href: safetyGuide.url,
+    href: "https://drive.google.com/file/d/1i9bst-Z6RB5USrt8yzdaYVED6GNS1_c8/view?usp=drivesdk",
     icon: "download",
   },
   {
