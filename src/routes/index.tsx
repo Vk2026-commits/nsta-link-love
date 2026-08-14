@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import safetyGuide from "@/assets/safety-guide.pdf.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,9 +58,9 @@ const LINKS: LinkItem[] = [
     primary: true,
   },
   {
-    label: "Download Free Security Guide",
+    label: "The Smart Woman's Personal Safety Guide",
     sub: "PDF · Free download",
-    href: "https://www.kairossecurity.com/guide.pdf",
+    href: safetyGuide.url,
     icon: "download",
   },
   {
