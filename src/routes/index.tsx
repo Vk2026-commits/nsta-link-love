@@ -22,12 +22,52 @@ export const Route = createFileRoute("/")({
 
 const LINKS = [
   {
-    label: "Kairos Security Website",
-    sub: "kairossecurity.com",
-    href: "https://www.kairossecurity.com",
-    primary: true,
+    label: "View Products",
+    sub: "Browse our security solutions",
+    href: "https://www.kairossecurity.com/products",
+    icon: "cart",
+  },
+  {
+    label: "Download Free Security Guide",
+    sub: "PDF · Free download",
+    href: "https://www.kairossecurity.com/guide.pdf",
+    icon: "download",
+  },
+  {
+    label: "Get Information / Contact",
+    sub: "hello@kairossecurity.com",
+    href: "mailto:hello@kairossecurity.com",
+    icon: "mail",
+  },
+  {
+    label: "Instagram",
+    sub: "@kairossecurity",
+    href: "https://instagram.com/kairossecurity",
+    icon: "instagram",
+  },
+  {
+    label: "LinkedIn",
+    sub: "Kairos Security",
+    href: "https://linkedin.com/company/kairossecurity",
+    icon: "linkedin",
   },
 ] as const;
+
+const ICONS: Record<string, JSX.Element> = {
+  cart: (
+    <path d="M2 3h2l1.6 9.5a1 1 0 0 0 1 .8h7.8a1 1 0 0 0 1-.8L18 6H5" />
+  ),
+  download: <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />,
+  mail: (
+    <path d="M2 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z M2 5l6 4 6-4" />
+  ),
+  instagram: (
+    <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" />
+  ),
+  linkedin: (
+    <path d="M3 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM2.5 7h1.5v7H2.5zM6 7h1.4v1.1h.02c.27-.5.94-1.1 2.05-1.1 1.5 0 2.73 1 2.73 3.05V14h-1.5v-3.4c0-.8-.3-1.35-1.02-1.35-.55 0-.88.37-1.03.74-.05.13-.07.3-.07.47V14H6.2z" />
+  ),
+};
 
 function LinksPage() {
   return (
