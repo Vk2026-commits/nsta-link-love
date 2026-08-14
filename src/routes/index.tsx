@@ -64,8 +64,8 @@ const LINKS: LinkItem[] = [
   },
   {
     label: "Book a Consultation",
-    sub: "30-min call · via Calendly",
-    href: "https://calendly.com/staylor-kairossecurity/30min",
+    sub: "1-hour call · via Calendly",
+    href: "https://calendly.com/staylor-kairossecurity/60min",
     icon: "calendar",
   },
   {
