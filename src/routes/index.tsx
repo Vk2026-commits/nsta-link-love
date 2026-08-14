@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -6,12 +7,14 @@ export const Route = createFileRoute("/")({
       { title: "Kairos Security — Links" },
       {
         name: "description",
-        content: "Official link hub for Kairos Security. Visit our website.",
+        content:
+          "Official link hub for Kairos Security. View products, grab our free security guide, contact us, or follow along.",
       },
       { property: "og:title", content: "Kairos Security — Links" },
       {
         property: "og:description",
-        content: "Official link hub for Kairos Security. Visit our website.",
+        content:
+          "Official link hub for Kairos Security. View products, grab our free security guide, contact us, or follow along.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -20,12 +23,35 @@ export const Route = createFileRoute("/")({
   component: LinksPage,
 });
 
-const LINKS = [
+type LinkItem = {
+  label: string;
+  sub: string;
+  href: string;
+  icon: keyof typeof ICONS;
+  primary?: boolean;
+};
+
+const ICONS = {
+  cart: <path d="M2 3h2l1.6 9.5a1 1 0 0 0 1 .8h7.8a1 1 0 0 0 1-.8L18 6H5" />,
+  download: (
+    <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />
+  ),
+  mail: <path d="M2 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5zM2 5l6 4 6-4" />,
+  instagram: (
+    <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" />
+  ),
+  linkedin: (
+    <path d="M3 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM2.5 7h1.5v7H2.5zM6 7h1.4v1.1h.02c.27-.5.94-1.1 2.05-1.1 1.5 0 2.73 1 2.73 3.05V14h-1.5v-3.4c0-.8-.3-1.35-1.02-1.35-.55 0-.88.37-1.03.74-.05.13-.07.3-.07.47V14H6.2z" />
+  ),
+} satisfies Record<string, ReactNode>;
+
+const LINKS: LinkItem[] = [
   {
     label: "View Products",
     sub: "Browse our security solutions",
     href: "https://www.kairossecurity.com/products",
     icon: "cart",
+    primary: true,
   },
   {
     label: "Download Free Security Guide",
@@ -51,23 +77,7 @@ const LINKS = [
     href: "https://linkedin.com/company/kairossecurity",
     icon: "linkedin",
   },
-] as const;
-
-const ICONS: Record<string, JSX.Element> = {
-  cart: (
-    <path d="M2 3h2l1.6 9.5a1 1 0 0 0 1 .8h7.8a1 1 0 0 0 1-.8L18 6H5" />
-  ),
-  download: <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />,
-  mail: (
-    <path d="M2 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z M2 5l6 4 6-4" />
-  ),
-  instagram: (
-    <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" />
-  ),
-  linkedin: (
-    <path d="M3 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM2.5 7h1.5v7H2.5zM6 7h1.4v1.1h.02c.27-.5.94-1.1 2.05-1.1 1.5 0 2.73 1 2.73 3.05V14h-1.5v-3.4c0-.8-.3-1.35-1.02-1.35-.55 0-.88.37-1.03.74-.05.13-.07.3-.07.47V14H6.2z" />
-  ),
-};
+];
 
 function LinksPage() {
   return (
@@ -101,21 +111,37 @@ function LinksPage() {
                   : "border-border bg-card text-foreground hover:bg-accent",
               ].join(" ")}
             >
-              <span className="flex flex-col">
-                <span className="text-base font-medium">{link.label}</span>
-                {link.sub && (
-                  <span
-                    className={[
-                      "text-xs",
-                      link.primary ? "text-background/70" : "text-muted-foreground",
-                    ].join(" ")}
-                  >
-                    {link.sub}
-                  </span>
-                )}
+              <span className="flex items-center gap-3">
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  {ICONS[link.icon]}
+                </svg>
+                <span className="flex flex-col">
+                  <span className="text-base font-medium">{link.label}</span>
+                  {link.sub && (
+                    <span
+                      className={[
+                        "text-xs",
+                        link.primary
+                          ? "text-background/70"
+                          : "text-muted-foreground",
+                      ].join(" ")}
+                    >
+                      {link.sub}
+                    </span>
+                  )}
+                </span>
               </span>
               <svg
-                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                 viewBox="0 0 16 16"
                 fill="none"
                 stroke="currentColor"
