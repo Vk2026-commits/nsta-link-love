@@ -32,6 +32,9 @@ type LinkItem = {
 };
 
 const ICONS = {
+  calendar: (
+    <path d="M3 4.5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8zM3 6.5h10M5.5 2.5v3M9.5 2.5v3" />
+  ),
   cart: <path d="M2 3h2l1.6 9.5a1 1 0 0 0 1 .8h7.8a1 1 0 0 0 1-.8L18 6H5" />,
   download: (
     <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />
