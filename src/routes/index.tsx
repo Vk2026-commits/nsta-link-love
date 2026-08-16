@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type { ReactNode } from "react";
-
+import { useState, type FormEvent, type ReactNode } from "react";
+import { getSupabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,10 +37,10 @@ const ICONS = {
     <path d="M3 4.5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8zM3 6.5h10M5.5 2.5v3M9.5 2.5v3" />
   ),
   cart: <path d="M2 3h2l1.6 9.5a1 1 0 0 0 1 .8h7.8a1 1 0 0 0 1-.8L18 6H5" />,
-  download: (
-    <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />
+  download: <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 14v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4" />,
+  mail: (
+    <path d="M2 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5zM2 5l6 4 6-4" />
   ),
-  mail: <path d="M2 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5zM2 5l6 4 6-4" />,
   instagram: (
     <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" />
   ),
@@ -58,12 +58,6 @@ const LINKS: LinkItem[] = [
     primary: true,
   },
   {
-    label: "The Smart Woman's Personal Safety Guide",
-    sub: "PDF · Free download",
-    href: "https://drive.google.com/file/d/1i9bst-Z6RB5USrt8yzdaYVED6GNS1_c8/view?usp=drivesdk",
-    icon: "download",
-  },
-  {
     label: "Book a Consultation",
     sub: "1-hour call · via Calendly",
     href: "https://calendly.com/staylor-kairossecurity/new-meeting",
@@ -77,7 +71,45 @@ const LINKS: LinkItem[] = [
   },
 ];
 
+const GUIDE_URL =
+  "https://drive.google.com/file/d/1i9bst-Z6RB5USrt8yzdaYVED6GNS1_c8/view?usp=drivesdk";
+
 function LinksPage() {
+  const [showGuideForm, setShowGuideForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  async function handleGuideSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setFormError("");
+
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") || "").trim();
+    const email = String(form.get("email") || "")
+      .trim()
+      .toLowerCase();
+    const phone = String(form.get("phone") || "").trim();
+
+    try {
+      const { error } = await getSupabase().from("guide_leads").insert({
+        name,
+        email,
+        phone,
+        guide: "smart-womans-personal-safety-guide",
+      });
+
+      if (error) throw error;
+      window.open(GUIDE_URL, "_blank", "noopener,noreferrer");
+      setShowGuideForm(false);
+      event.currentTarget.reset();
+    } catch {
+      setFormError("We couldn't save your information. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen max-w-md flex-col items-center px-6 py-16">
@@ -86,16 +118,121 @@ function LinksPage() {
           <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border bg-muted text-2xl font-semibold tracking-tight text-foreground">
             K
           </div>
-          <h1 className="mt-5 text-2xl font-semibold tracking-tight">
-            Kairos Security
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Protection, intelligence, and trust.
-          </p>
+          <h1 className="mt-5 text-2xl font-semibold tracking-tight">Kairos Security</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Protection, intelligence, and trust.</p>
         </header>
 
         {/* Links */}
         <nav className="mt-10 flex w-full flex-col gap-3" aria-label="Links">
+          <button
+            type="button"
+            onClick={() => setShowGuideForm((visible) => !visible)}
+            aria-expanded={showGuideForm}
+            aria-controls="guide-download-form"
+            className="group flex w-full items-center justify-between rounded-xl border border-border bg-card px-5 py-4 text-left text-foreground transition-all hover:bg-accent"
+          >
+            <span className="flex items-center gap-3">
+              <svg
+                className="h-5 w-5 shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                {ICONS.download}
+              </svg>
+              <span className="flex flex-col">
+                <span className="text-base font-medium">
+                  The Smart Woman's Personal Safety Guide
+                </span>
+                <span className="text-xs text-muted-foreground">PDF · Free download</span>
+              </span>
+            </span>
+            <svg
+              className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </button>
+
+          {showGuideForm && (
+            <form
+              id="guide-download-form"
+              onSubmit={handleGuideSubmit}
+              className="rounded-xl border border-border bg-card p-5"
+            >
+              <h2 className="text-base font-semibold">Get your free guide</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Enter your information and the PDF will open after submission.
+              </p>
+              <div className="mt-4 space-y-3">
+                <label className="block text-sm font-medium">
+                  Name
+                  <input
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    maxLength={100}
+                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </label>
+                <label className="block text-sm font-medium">
+                  Email
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    maxLength={254}
+                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </label>
+                <label className="block text-sm font-medium">
+                  Phone number
+                  <input
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    required
+                    minLength={7}
+                    maxLength={30}
+                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </label>
+              </div>
+              <label className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
+                <input type="checkbox" required className="mt-0.5" />
+                <span>
+                  I agree that Kairos Security may use this information to send me the guide and
+                  contact me about relevant services.
+                </span>
+              </label>
+              {formError && (
+                <p role="alert" className="mt-3 text-sm text-destructive">
+                  {formError}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mt-4 w-full rounded-lg bg-foreground px-4 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {submitting ? "Submitting…" : "Get the free guide"}
+              </button>
+            </form>
+          )}
+
           {LINKS.map((link) => (
             <a
               key={link.href}
@@ -128,9 +265,7 @@ function LinksPage() {
                     <span
                       className={[
                         "text-xs",
-                        link.primary
-                          ? "text-background/70"
-                          : "text-muted-foreground",
+                        link.primary ? "text-background/70" : "text-muted-foreground",
                       ].join(" ")}
                     >
                       {link.sub}
